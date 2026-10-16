@@ -23,7 +23,7 @@ Sample size is `n = 500` with 1000 replicates per scenario.
 - Outcome: `Y ~ N(s(V), 1)`, `s(V) = b . [1, V1^2, V2, V2*V3]`, `b = [0, 1, 2.5, 3]`.
 - Missingness: `logit{pi(V)} = a . [1, I1, I2, I3, I1*I2]`, `a = [-1, 1, 0, 0, -1]`.
 - False OR model: `Y` on `[1, V1, V2^2]`.
-- False missingness model: `D` on `[I1, I3]`, no intercept.
+- False missingness model: `D` on `[1, I1, I3]`.
 
 ### Scenario B: treatment effect
 
@@ -34,7 +34,8 @@ is generated for use by the false treatment model only.
   `s(D, V) = b . [1, V1^2*D, V2*D, V2*V3*(1 - D), V3*(1 - D)]`, `b = [0, 2, 3, 2, -4]`.
 - Treatment: `logit{pi(V)} = a . [1, I1, I2, I3, I1*I2]`, `a = [-3, 2.5, 3, 1, -3]`.
 - False OR model: `Y` on `[1, V1*D, V2^2*(1 - D)]`.
-- False treatment model: `D` on `[I3, V4]`, no intercept.
+- False treatment model: `D` on `[1, I3, V4]`, keeping one covariate that genuinely
+  determines treatment and adding one noise covariate, as the text describes.
 
 ## Estimands
 
@@ -52,10 +53,15 @@ regression.
   arm-specific Horvitz-Thompson means.
 - **OR.** Fit `s`, then average the fitted values (A) or the fitted contrast between `D = 1`
   and `D = 0` (B).
-- **DR.** Add the inverse-probability covariate to the OR design, refit by OLS, and average the
-  predictions. The added covariate is `1 / pi(V)` in scenario A and `1 / f(D | V)` in scenario
-  B, where `f(D | V) = D * pi(V) + (1 - D) * {1 - pi(V)}`; in B the two augmentation
-  coefficients are constrained equal.
+- **DR.** Add inverse-probability covariates to the OR design, refit by OLS, and average the
+  predictions. Scenario A adds `1 / pi(V)`. Scenario B adds `D / pi(V)` and
+  `(1 - D) / {1 - pi(V)}`, the two covariates of Scharfstein et al. (1999); the counterfactual
+  predictions evaluate them at the treatment being predicted, not at the treatment received.
+
+Four further cells, outside the reproduction grid, run the variant proposed in Section 2.2 of
+the paper, which constrains the two augmentation coefficients to be equal and so adds the single
+covariate `1 / f(D | V)` with `f(D | V) = D * pi(V) + (1 - D) * {1 - pi(V)}`. These are labelled
+`DR1` and are reported separately.
 
 Crossing the estimators with correct and false nuisance models gives the eight configurations of
 Table 2: `HT`, `HT.fal`, `OR`, `OR.fal`, `DR`, `DR.ofal` (false OR), `DR.pfal` (false
@@ -107,6 +113,13 @@ replicates. Published values from Table 2 are the comparison targets.
 3. Write one row per estimate to a long-format file with columns
    `scenario, replicate, estimator, estimate`.
 4. Summarise that file into the four performance measures and compare with the published values.
+
+Two points of the published description are not literally reproducible and were resolved
+numerically. The false propensity models of Table 1 are written without an intercept term, but
+including one reproduces the published Horvitz-Thompson biases in both scenarios to two decimal
+places while omitting one does not, so they are fitted with intercepts. The treatment-effect
+results likewise match the two-covariate estimator of Scharfstein et al. rather than the
+constrained variant that Section 2.2 proposes.
 
 Propensity models use only `V`; `Y` enters only the OR models and the HT numerator. In scenario
 A, OR models are fitted on complete cases (`D = 1`) and their predictions averaged over all `n`

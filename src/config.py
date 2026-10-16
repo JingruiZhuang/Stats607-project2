@@ -28,7 +28,7 @@ SCENARIOS = {
             "alpha": [-1.0, 1.0, 0.0, 0.0, -1.0],
         },
         "or_false": {"terms": ["1", "V1", "V2**2"]},
-        "ps_false": {"terms": ["I1", "I3"]},
+        "ps_false": {"terms": ["1", "I1", "I3"]},
     },
     "B": {
         "label": "Treatment effect, ATE",
@@ -42,7 +42,7 @@ SCENARIOS = {
             "alpha": [-3.0, 2.5, 3.0, 1.0, -3.0],
         },
         "or_false": {"terms": ["1", "V1*D", "V2**2*(1-D)"]},
-        "ps_false": {"terms": ["I3", "V4"]},
+        "ps_false": {"terms": ["1", "I3", "V4"]},
     },
 }
 
@@ -56,6 +56,15 @@ ESTIMATORS = [
     ("DR.ofal",   "dr", "ps_true",  "or_false"),
     ("DR.pfal",   "dr", "ps_false", "or_true"),
     ("DR.o+pfal", "dr", "ps_false", "or_false"),
+]
+
+# Beyond the reproduction: the phi1 = phi2 variant proposed in Section 2.2 of the
+# paper, which turns out not to be doubly robust for the treatment effect.
+EXTENSION_ESTIMATORS = [
+    ("DR1",        "dr1", "ps_true",  "or_true"),
+    ("DR1.ofal",   "dr1", "ps_true",  "or_false"),
+    ("DR1.pfal",   "dr1", "ps_false", "or_true"),
+    ("DR1.o+pfal", "dr1", "ps_false", "or_false"),
 ]
 
 # Published Table 2 values, for output validation and the comparison table.
