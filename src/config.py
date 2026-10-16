@@ -59,7 +59,11 @@ ESTIMATORS = [
 ]
 
 # Beyond the reproduction: the phi1 = phi2 variant proposed in Section 2.2 of the
-# paper, which turns out not to be doubly robust for the treatment effect.
+# paper, which turns out not to be doubly robust for the treatment effect.  Only
+# scenario B is affected; with a single augmenting covariate, constraining its
+# coefficient is vacuous and the variant reduces to the estimator above.
+EXTENSION_SCENARIOS = ["B"]
+
 EXTENSION_ESTIMATORS = [
     ("DR1",        "dr1", "ps_true",  "or_true"),
     ("DR1.ofal",   "dr1", "ps_true",  "or_false"),

@@ -61,7 +61,8 @@ regression.
 Four further cells, outside the reproduction grid, run the variant proposed in Section 2.2 of
 the paper, which constrains the two augmentation coefficients to be equal and so adds the single
 covariate `1 / f(D | V)` with `f(D | V) = D * pi(V) + (1 - D) * {1 - pi(V)}`. These are labelled
-`DR1` and are reported separately.
+`DR1`, apply to scenario B only, and are reported separately. Scenario A adds a single
+augmenting covariate whatever the constraint, so there the two variants are the same estimator.
 
 Crossing the estimators with correct and false nuisance models gives the eight configurations of
 Table 2: `HT`, `HT.fal`, `OR`, `OR.fal`, `DR`, `DR.ofal` (false OR), `DR.pfal` (false
@@ -82,7 +83,8 @@ reproduction and the published values can be judged against simulation noise.
 ## Design Matrix
 
 Sixteen cells: 2 scenarios by 8 estimator configurations, each at `n = 500` with 1000
-replicates. Published values from Table 2 are the comparison targets.
+replicates. Published values from Table 2 are the comparison targets. Four extension cells
+(`DR1`, scenario B only) are run alongside and reported separately.
 
 | Scenario | Estimator | Propensity | OR | Published bias | Published variance |
 | --- | --- | --- | --- | --- | --- |

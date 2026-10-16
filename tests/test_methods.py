@@ -55,6 +55,18 @@ def test_doubly_robust_under_one_correct_model():
             assert abs(value - spec["truth"]) < 0.1, (scenario, ps, orm, value)
 
 
+def test_constrained_variant_is_vacuous_in_scenario_a():
+    """Scenario A adds a single augmenting covariate, so constraining its
+    coefficient changes nothing and the two variants coincide exactly."""
+    spec = config.SCENARIOS["A"]
+    data = dgps.generate("A", 5000, np.random.default_rng(24))
+    for orm in ("or_true", "or_false"):
+        plain = methods.estimate_dr(data, "A", spec["ps_true"], spec[orm])
+        constrained = methods.estimate_dr(data, "A", spec["ps_true"], spec[orm],
+                                          constrained=True)
+        assert plain == constrained
+
+
 def test_constrained_variant_is_not_doubly_robust():
     """The phi1 = phi2 variant of Section 2.2 loses double robustness for the
     treatment effect: with a correct propensity model but a false outcome
