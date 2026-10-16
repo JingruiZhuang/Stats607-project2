@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+
+results/raw/*.csv
+results/raw/*.pkl
+# final figures are committed so the repo is readable without rerunning
+
+data/simulated/*
+!**/.gitkeep
+
+# course material and the source paper (not ours to redistribute)
+*.pdf
