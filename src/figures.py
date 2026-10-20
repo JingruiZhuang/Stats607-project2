@@ -23,6 +23,13 @@ GRID = "#dcdbd6"
 # light mode.  Colour follows the estimator family, never its rank in a figure.
 FAMILY_COLOUR = {"HT": "#2a78d6", "OR": "#eb6834", "DR": "#1baf7a", "DR1": "#6250d6"}
 
+FAMILY_LABEL = {
+    "HT": "Horvitz-Thompson",
+    "OR": "outcome regression",
+    "DR": "doubly robust",
+    "DR1": "doubly robust, coefficients constrained equal",
+}
+
 MARK = "·"
 
 
@@ -42,6 +49,13 @@ def style():
         "axes.titlesize": 10,
         "figure.dpi": 200,
     })
+
+
+def family_handles(stems):
+    """Legend entries naming each estimator family beside its colour."""
+    return [plt.Line2D([], [], marker="s", linestyle="none", markersize=8,
+                       color=FAMILY_COLOUR[stem], label=FAMILY_LABEL[stem])
+            for stem in stems]
 
 
 def family(estimator):
@@ -68,7 +82,7 @@ def plot_distributions(raw, out_path):
     they expose the heavy tails of the doubly robust estimator under a false
     outcome model that the variance column reports but does not convey.
     """
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.6))
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.9))
 
     for ax, scenario in zip(axes, config.SCENARIOS):
         names = [c[0] for c in config.ESTIMATORS]
@@ -105,9 +119,12 @@ def plot_distributions(raw, out_path):
         ax.set_title(f"Scenario {scenario}: {config.SCENARIOS[scenario]['label']}",
                      loc="left", color=INK)
 
+    fig.legend(handles=family_handles(["HT", "OR", "DR"]), loc="lower left",
+               bbox_to_anchor=(0.005, 0.0), ncol=3, frameon=False, fontsize=8,
+               labelcolor=INK_SOFT)
     fig.suptitle("Sampling distributions over 1000 replicates, n = 500",
                  x=0.005, ha="left", fontsize=11, color=INK)
-    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    fig.tight_layout(rect=(0, 0.05, 1, 0.94))
     fig.savefig(out_path)
     plt.close(fig)
     logger.info("wrote %s", out_path)
@@ -121,7 +138,7 @@ def plot_bias_grid(summary, out_path):
     figure instead of inferred from a table of estimator names.
     """
     core = summary[summary["published_bias_mean"].notna()]
-    fig, axes = plt.subplots(1, 2, figsize=(11.5, 5.0))
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 5.4))
 
     for ax, scenario in zip(axes, config.SCENARIOS):
         cells = [c for c in config.ESTIMATORS]
@@ -151,7 +168,7 @@ def plot_bias_grid(summary, out_path):
         ax.set_title(f"Scenario {scenario}: {config.SCENARIOS[scenario]['label']}",
                      loc="left", color=INK)
 
-    handles = [
+    handles = family_handles(["HT", "OR", "DR"]) + [
         plt.Line2D([], [], marker="o", linestyle="none", markersize=7,
                    color=INK_SOFT, markeredgecolor=SURFACE,
                    label="this study, 95% Monte Carlo interval"),
@@ -160,10 +177,10 @@ def plot_bias_grid(summary, out_path):
                    label="Bang and Robins (2005), Table 2"),
     ]
     fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.005, 0.0),
-               ncol=2, frameon=False, fontsize=8, labelcolor=INK_SOFT)
+               ncol=3, frameon=False, fontsize=8, labelcolor=INK_SOFT)
     fig.suptitle("Bias of each estimator, against the published values",
                  x=0.005, ha="left", fontsize=11, color=INK)
-    fig.tight_layout(rect=(0, 0.06, 1, 0.94))
+    fig.tight_layout(rect=(0, 0.11, 1, 0.94))
     fig.savefig(out_path)
     plt.close(fig)
     logger.info("wrote %s", out_path)
@@ -221,6 +238,8 @@ def plot_extension(summary, out_path):
     ax.set_ylabel("bias in estimating the average treatment effect")
     ax.set_title("Scenario B: constraining the two augmentation coefficients\n"
                  "costs double robustness", loc="left", color=INK)
+    ax.legend(handles=family_handles(["DR", "DR1"]), loc="upper left",
+              frameon=False, fontsize=8, labelcolor=INK_SOFT)
     fig.tight_layout()
     fig.savefig(out_path)
     plt.close(fig)
