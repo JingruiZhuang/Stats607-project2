@@ -14,3 +14,6 @@ data/simulated/*
 
 # course material and the source paper (not ours to redistribute)
 *.pdf
+
+# make figures sentinel
+results/figures/.stamp

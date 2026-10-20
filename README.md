@@ -27,11 +27,18 @@ make test       # test suite
 make clean      # remove generated files
 ```
 
-Estimated runtime: TBD.
+Estimated runtime: about 22 seconds for `make all` on a laptop, of which 19 seconds is the
+simulation itself; `make test` takes a further 9 seconds. Rerunning `make all` from clean
+reproduces the committed figures byte for byte.
 
 ## Key findings
 
-TBD.
+All sixteen cells of Table 2 reproduce, with the largest gap from a published bias being 1.1
+Monte Carlo standard errors. Reaching that agreement needs two choices the paper does not
+state: its deliberately wrong propensity models must be fitted with an intercept, and its
+treatment-effect results come from the two-covariate estimator of Scharfstein et al. rather
+than the constrained variant the paper itself proposes, which turns out not to be doubly
+robust.
 
 ## Layout
 
@@ -45,3 +52,6 @@ src/analyze.py      raw estimates -> summary table
 src/figures.py      figures
 tests/              DGP, method, output and reproducibility checks
 ```
+
+Outputs: `results/raw/estimates.csv` holds one row per estimate (20,000 rows),
+`results/raw/summary.csv` one row per cell, and `results/figures/` the three figures.
