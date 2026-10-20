@@ -62,9 +62,10 @@ on, is absent. Running it would have exposed the problem above immediately.
 the results separates a small-sample effect from an asymptotic one.
 
 **Reported precision is too coarse to check.** Values are given to two decimals with no Monte
-Carlo standard errors. The standard error of a bias here is about 0.006 and of a variance about
-0.004, so rounding contributes as much uncertainty as the simulation does. A reader cannot
-distinguish a real discrepancy from a rounding difference.
+Carlo standard errors. Across the sixteen cells the standard error of a bias runs from 0.006 to
+0.017 and of a variance from 0.002 to 0.013, so in the most precise cells the rounding of the
+published value contributes as much uncertainty as the simulation itself. For those cells a
+reader cannot distinguish a real discrepancy from a rounding difference.
 
 ## What I would change
 
@@ -95,8 +96,9 @@ The surprise was that the published table does not match the method the text rec
 implemented the paper as written, got a result wrong by a factor I could not explain, and spent
 some time hunting a bug in my own code before trying the predecessor's version, which matched
 at once. Reading the paper gives no hint of this; only running it does. A smaller surprise was
-how cheap double robustness is here: with a correct outcome model its variance equals that of
-the maximum likelihood estimator to three decimals. That part of the argument holds up well.
+how cheap double robustness is here: in scenario A, with a correct outcome model, its variance
+is 0.0418 against 0.0416 for the maximum likelihood estimator, a difference well inside Monte
+Carlo error. That part of the argument holds up well.
 
 I reproduced the two cross-sectional scenarios, not the longitudinal and marginal structural
 model results of Tables 3 and 4, which use a more involved sequential procedure; nothing here
