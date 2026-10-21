@@ -60,8 +60,7 @@ Outputs: `results/raw/estimates.csv` holds one row per estimate (20,000 rows),
 
 Course policy allows AI tools with attribution. This records where they were used.
 
-Nothing in this repository predates the project. The following were drafted with Claude Code and
-then reviewed, corrected and run by me:
+The following were drafted with Claude Code and then reviewed, corrected and run by me:
 
 | File | Role |
 | --- | --- |
