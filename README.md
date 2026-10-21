@@ -55,3 +55,29 @@ tests/              DGP, method, output and reproducibility checks
 
 Outputs: `results/raw/estimates.csv` holds one row per estimate (20,000 rows),
 `results/raw/summary.csv` one row per cell, and `results/figures/` the three figures.
+
+## AI assistance
+
+Course policy allows AI tools with attribution. This records where they were used.
+
+Nothing in this repository predates the project. The following were drafted with Claude Code and
+then reviewed, corrected and run by me:
+
+| File | Role |
+| --- | --- |
+| `src/config.py` | parameters and the model specifications transcribed from Table 1 |
+| `src/dgps.py` | the two data-generating mechanisms |
+| `src/methods.py` | the Horvitz-Thompson, outcome-regression and doubly robust estimators |
+| `src/metrics.py` | performance measures and their Monte Carlo standard errors |
+| `src/simulation.py`, `src/analyze.py` | the simulation loop and the summary table |
+| `src/figures.py` | the three figures |
+| `tests/` | the test suite |
+| `Makefile`, `requirements.txt` | workflow and dependencies |
+| `ADEMP.md`, `ANALYSIS.md`, `README.md` | documentation |
+
+The choice of paper, the scope of the reproduction and the reporting decisions were mine.
+
+The two discrepancies reported in ANALYSIS.md, the intercepts in the false propensity models and
+the estimator behind Table 2, were found by running the code against the published values rather
+than taken from any source. Each is covered by a test that fails if the decision is reverted, so
+both can be checked rather than taken on trust.
